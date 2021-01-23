@@ -4,28 +4,27 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import com.example.mobiquitytest.R
+import com.example.mobiquitytest.databinding.FragmentHelpBinding
 
 class HelpFragment : Fragment() {
-
-    private lateinit var helpViewModel: HelpViewModel
+    private lateinit var bind: FragmentHelpBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        helpViewModel =
-            ViewModelProvider(this).get(HelpViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
-        val textView: TextView = root.findViewById(R.id.text_dashboard)
-        helpViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-        return root
+        bind = FragmentHelpBinding.inflate(inflater, container, false)
+        return bind.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val customHtml = "<html><body><h1>Welcome to Weather App</h1>" +
+                "<p>This App can show weather forecast of any location of your choice</p>" +
+                "<h3>1. Go to home screen and click plus icon</h3><h3>2. Move the pointer to any location of your choice</h3><h3>3. Save the location</h3>" +
+                "</body></html>"
+        bind.helpPage.loadData(customHtml, "text/html", "UTF-8")
     }
 }

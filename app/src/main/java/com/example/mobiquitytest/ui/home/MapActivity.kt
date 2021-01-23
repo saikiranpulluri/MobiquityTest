@@ -9,13 +9,11 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatButton
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.work.WorkManager
 import com.example.mobiquitytest.R
+import com.example.mobiquitytest.databinding.ActivityMapBinding
 import com.example.mobiquitytest.ui.home.viewmodels.MapViewModel
 import com.example.mobiquitytest.utils.ViewModelFactory
 import com.example.mobiquitytest.work.GetCurrentWeatherWorker
@@ -23,16 +21,12 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
-    private var pinLocation: AppCompatImageView? = null
-    private var etCountry: TextInputEditText? = null
-    private var etCity: TextInputEditText? = null
-    private lateinit var btnSave: AppCompatButton
+    private lateinit var bind: ActivityMapBinding
     private var mMap: GoogleMap? = null
     private var latLng: LatLng? = null
     private lateinit var zipCode: String
@@ -46,12 +40,9 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_map)
+        bind = ActivityMapBinding.inflate(layoutInflater)
+        setContentView(bind.root)
 
-        pinLocation = findViewById(R.id.pin_location)
-        etCountry = findViewById(R.id.et_country)
-        etCity = findViewById(R.id.et_city)
-        btnSave = findViewById(R.id.btn_save)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(
                     ACCESS_COARSE_LOCATION
@@ -70,23 +61,17 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         ) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        btnSave.setOnClickListener {
+        bind.btnSave.setOnClickListener {
             if (valid()) {
                 lifecycleScope.launch {
                     latLng?.let { it1 ->
                         mapViewModel.saveLocationToDB(
                             it1,
-                            etCountry?.text.toString(), etCity?.text.toString(),
+                            bind.etCountry.text.toString(), bind.etCity.text.toString(),
                             zipCode
                         )
                         lifecycleScope.launch {
                             GetCurrentWeatherWorker.send(this@MapActivity, zipCode)
-                            /*val workInfosForUniqueWork = WorkManager.getInstance(this@MapActivity)
-                                .getWorkInfosForUniqueWork(zipCode)
-
-                            if (workInfosForUniqueWork.isDone) {
-
-                            }*/
                             finish()
                         }
                     }
@@ -127,7 +112,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap?.setOnCameraIdleListener {
             latLng = mMap?.cameraPosition?.target
             mMap?.clear()
-            pinLocation?.visibility = View.VISIBLE
+            bind.pinLocation.visibility = View.VISIBLE
             try {
                 getAddressFromLatLong(latLng?.latitude, latLng?.longitude)
             } catch (e: Exception) {
@@ -158,10 +143,10 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                     Timber.i("countryStr::$countryStr")
                     Timber.i("cityStr::$cityStr")
                     countryStr?.let {
-                        etCountry?.setText(countryStr)
+                        bind.etCountry.setText(countryStr)
                     }
                     cityStr?.let {
-                        etCity?.setText(cityStr)
+                        bind.etCity.setText(cityStr)
                     }
                 }
                 System.gc()

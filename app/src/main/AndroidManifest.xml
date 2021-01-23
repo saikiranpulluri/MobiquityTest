@@ -23,6 +23,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MobiquityTest"
         tools:ignore="AllowBackup">
+        <activity
+            android:name=".ui.forecast.ForecastActivity"
+            android:theme="@style/Theme.MobiquityTest.NoActionBar">
+
+        </activity>
         <activity android:name=".ui.home.MapActivity">
 
         </activity>
@@ -40,8 +45,6 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyAajU8GdlJnxM8lZH2riYRMR27sXXLrdjw" />
-
-
     </application>
 
 </manifest>

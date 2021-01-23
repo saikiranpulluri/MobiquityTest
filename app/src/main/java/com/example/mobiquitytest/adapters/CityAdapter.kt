@@ -8,11 +8,13 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobiquitytest.R
 import com.example.mobiquitytest.database.City
+import com.example.mobiquitytest.databinding.ItemMainBinding
 import com.example.mobiquitytest.utils.Utils
 
 internal class CityAdapter(private val context: Context) :
     RecyclerView.Adapter<CityAdapter.ViewHolder>() {
 
+    private lateinit var listener: OnCityClickListener
     var cities: List<City> = emptyList()
         set(value) {
             field = value
@@ -23,9 +25,8 @@ internal class CityAdapter(private val context: Context) :
         parent: ViewGroup,
         viewType: Int
     ): ViewHolder {
-        val rowViewObj: View =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_main, parent, false)
-        return ViewHolder(rowViewObj)
+        val bind = ItemMainBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(bind.root)
     }
 
     override fun onBindViewHolder(
@@ -33,27 +34,26 @@ internal class CityAdapter(private val context: Context) :
         position: Int
     ) {
         holder.bind(cities[position])
-        holder.itemView.setOnClickListener {
-            // listener.onWifiItemClicked(cities[position])
-        }
     }
 
     override fun getItemCount(): Int {
         return cities.size
     }
 
-    /*   fun setWifiItemClickListener(clickListener: WifiClickListener) {
-           listener = clickListener
-       }*/
+    fun setOnCityClickListener(clickListener: OnCityClickListener) {
+        listener = clickListener
+    }
 
     inner class ViewHolder(view: View) :
         RecyclerView.ViewHolder(view) {
         private var cityName: AppCompatTextView? = null
         private var temperature: AppCompatTextView? = null
+        private var mainView: View? = null
 
         init {
             cityName = itemView.findViewById(R.id.title)
             temperature = itemView.findViewById(R.id.temperature)
+            mainView = itemView.findViewById(R.id.view)
         }
 
         fun bind(city: City) {
@@ -64,6 +64,14 @@ internal class CityAdapter(private val context: Context) :
                     Utils.convertKelvinToCelsius(city.temperatureInKelvin),
                     context.getString(R.string.centigrade_symbol)
                 )
+
+            mainView?.setOnClickListener {
+                listener.onCityClicked(city)
+            }
         }
+    }
+
+    interface OnCityClickListener {
+        fun onCityClicked(city: City)
     }
 }

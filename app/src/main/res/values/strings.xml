@@ -12,4 +12,11 @@
     <string name="centigrade_symbol"> °C</string>
     <string name="farenhite_symbol"> °F</string>
     <string name="kelvin_symbol"> °K</string>
+    <string name="action_settings">Settings</string>
+    <string name="temp">Temp</string>
+    <string name="humidity">Humidity</string>
+    <string name="wind">Wind</string>
+    <string name="percentage_symbol">%</string>
+    <string name="units_wind">KmH</string>
+    <string name="reset_locations">Reset Locations</string>
 </resources>

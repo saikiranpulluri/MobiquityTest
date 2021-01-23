@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10sp"
+    android:background="@color/viewBackgroundColor"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvForecastTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/opensans_semibold"
+        android:textColor="@color/teal_700"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tools:text="12-12-2021" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvRainCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/opensans_semibold"
+        android:textColor="@color/accent_color"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        tools:text="12-12-2021" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_horizontal_margin">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvForecastState"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="@string/temp"
+            app:layout_constraintEnd_toStartOf="@+id/textForecastHumidity"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvForecastTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/opensans_regular"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tvForecastState"
+            app:layout_constraintHorizontal_bias="0.428"
+            app:layout_constraintStart_toStartOf="@+id/tvForecastState"
+            app:layout_constraintTop_toBottomOf="@+id/tvForecastState"
+            tools:text="23" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textForecastHumidity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="@string/humidity"
+            app:layout_constraintEnd_toStartOf="@+id/textForecastWind"
+            app:layout_constraintStart_toEndOf="@+id/tvForecastState"
+            app:layout_constraintTop_toTopOf="@+id/tvForecastState" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvForecastHumidity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/opensans_regular"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/textForecastHumidity"
+            app:layout_constraintStart_toStartOf="@+id/textForecastHumidity"
+            app:layout_constraintTop_toBottomOf="@+id/textForecastHumidity"
+            tools:text="49%" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textForecastWind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="@string/wind"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textForecastHumidity"
+            app:layout_constraintTop_toTopOf="@+id/textForecastHumidity" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvForecastWind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/opensans_regular"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/textForecastWind"
+            app:layout_constraintStart_toStartOf="@+id/textForecastWind"
+            app:layout_constraintTop_toBottomOf="@+id/textForecastWind"
+            tools:text="32 KmH" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

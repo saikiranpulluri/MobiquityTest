@@ -9,10 +9,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mobiquitytest.R
 import com.example.mobiquitytest.adapters.CityAdapter
+import com.example.mobiquitytest.database.City
 import com.example.mobiquitytest.databinding.FragmentHomeBinding
+import com.example.mobiquitytest.ui.forecast.ForecastActivity
 import com.example.mobiquitytest.ui.home.viewmodels.HomeViewModel
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
     private val viewModel by activityViewModels<HomeViewModel>()
@@ -21,9 +22,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bind = FragmentHomeBinding.bind(view)/*
-        homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)*/
+        bind = FragmentHomeBinding.bind(view)
         cityAdapter = CityAdapter(requireContext())
         bind.add.setOnClickListener {
             val intent = Intent(activity, MapActivity::class.java)
@@ -49,5 +48,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 }
             }
         }
+
+        cityAdapter.setOnCityClickListener(object : CityAdapter.OnCityClickListener {
+            override fun onCityClicked(city: City) {
+                val intent = Intent(activity, ForecastActivity::class.java)
+                intent.putExtra("city", city)
+                startActivity(intent)
+            }
+        })
     }
 }

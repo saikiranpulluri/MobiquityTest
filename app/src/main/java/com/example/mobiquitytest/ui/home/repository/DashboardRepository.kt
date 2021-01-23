@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import com.example.mobiquitytest.database.City
 import com.example.mobiquitytest.database.MobiquityDatabase
 import com.example.mobiquitytest.network.NetworkApi
+import com.example.mobiquitytest.network.models.ForecastModel
 import com.example.mobiquitytest.utils.Constant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -34,5 +35,25 @@ class DashboardRepository(private val database: MobiquityDatabase) {
                 }
             }
         }
+    }
+
+    suspend fun getForeCast(city: City): ForecastModel? {
+        return withContext(Dispatchers.IO) {
+            city.pinCode.let {
+                Timber.d("refresh about is called")
+                val split = city.latLong?.split(",")
+
+                split?.let {
+                    val weather =
+                        NetworkApi.getClient()
+                            ?.getForeCastForLoc(split[0], split[1], Constant.STANDARD)
+                    return@withContext weather
+                }
+            }
+        }
+    }
+
+    suspend fun resetLocations() {
+        database.cityDao().deleteAll()
     }
 }

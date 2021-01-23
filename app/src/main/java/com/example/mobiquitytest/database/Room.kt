@@ -22,7 +22,7 @@ interface CityDao {
     suspend fun insert(about: City)
 
     @Query("DELETE FROM city")
-    fun deleteAll()
+    suspend fun deleteAll()
 }
 
 @Database(entities = [City::class], version = 1)

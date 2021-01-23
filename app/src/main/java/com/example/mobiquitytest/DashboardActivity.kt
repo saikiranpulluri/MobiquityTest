@@ -8,11 +8,12 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.mobiquitytest.databinding.ActivityDashboardBinding
 import com.example.mobiquitytest.ui.home.viewmodels.HomeViewModel
 import com.example.mobiquitytest.utils.ViewModelFactory
 import com.example.mobiquitytest.work.GetCurrentWeatherWorker
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class DashboardActivity : AppCompatActivity() {
 
@@ -26,8 +27,9 @@ class DashboardActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dashboard)
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
+        val bind = ActivityDashboardBinding.inflate(layoutInflater)
+        setContentView(bind.root)
+        Timber.tag("viewmodel name==> : ${homeViewModel.getName()}")
 
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
@@ -38,16 +40,12 @@ class DashboardActivity : AppCompatActivity() {
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
-    }
+        bind.navView.setupWithNavController(navController)
 
-    override fun onResume() {
-        super.onResume()
         lifecycleScope.launch {
             homeViewModel.getAllCities().map {
                 GetCurrentWeatherWorker.send(this@DashboardActivity, it.pinCode)
             }
         }
     }
-
 }

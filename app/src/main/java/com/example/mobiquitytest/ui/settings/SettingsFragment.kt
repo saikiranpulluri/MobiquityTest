@@ -4,28 +4,33 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import com.example.mobiquitytest.R
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import com.example.mobiquitytest.databinding.FragmentSettingsBinding
+import com.example.mobiquitytest.ui.home.viewmodels.HomeViewModel
+import kotlinx.coroutines.launch
 
 class SettingsFragment : Fragment() {
 
-    private lateinit var settingsViewModel: SettingsViewModel
+    private lateinit var bind: FragmentSettingsBinding
+    private val viewModel by activityViewModels<HomeViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        settingsViewModel =
-            ViewModelProvider(this).get(SettingsViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_notifications, container, false)
-        val textView: TextView = root.findViewById(R.id.text_notifications)
-        settingsViewModel.text.observe(viewLifecycleOwner, {
-            textView.text = it
-        })
-        return root
+        bind = FragmentSettingsBinding.inflate(inflater, container, false)
+        return bind.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        bind.view.setOnClickListener {
+            lifecycleScope.launch {
+                viewModel.resetLocations()
+            }
+        }
     }
 }

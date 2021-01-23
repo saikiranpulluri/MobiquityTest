@@ -17,4 +17,12 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     suspend fun getAllCities(): List<City> {
         return repository.getAllCities()
     }
+
+    fun getName(): String {
+        return this.toString()
+    }
+
+    suspend fun resetLocations() {
+        repository.resetLocations()
+    }
 }
