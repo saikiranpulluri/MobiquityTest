@@ -3,13 +3,16 @@ package com.example.mobiquitytest
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.mobiquitytest.ui.home.viewmodels.HomeViewModel
 import com.example.mobiquitytest.utils.ViewModelFactory
+import com.example.mobiquitytest.work.GetCurrentWeatherWorker
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.launch
 
 class DashboardActivity : AppCompatActivity() {
 
@@ -37,4 +40,14 @@ class DashboardActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
+
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch {
+            homeViewModel.getAllCities().map {
+                GetCurrentWeatherWorker.send(this@DashboardActivity, it.pinCode)
+            }
+        }
+    }
+
 }

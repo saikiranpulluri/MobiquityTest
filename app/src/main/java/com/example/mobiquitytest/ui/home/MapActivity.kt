@@ -14,9 +14,11 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.work.WorkManager
 import com.example.mobiquitytest.R
 import com.example.mobiquitytest.ui.home.viewmodels.MapViewModel
 import com.example.mobiquitytest.utils.ViewModelFactory
+import com.example.mobiquitytest.work.GetCurrentWeatherWorker
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -77,8 +79,16 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                             etCountry?.text.toString(), etCity?.text.toString(),
                             zipCode
                         )
+                        lifecycleScope.launch {
+                            GetCurrentWeatherWorker.send(this@MapActivity, zipCode)
+                            /*val workInfosForUniqueWork = WorkManager.getInstance(this@MapActivity)
+                                .getWorkInfosForUniqueWork(zipCode)
 
-                        finish()
+                            if (workInfosForUniqueWork.isDone) {
+
+                            }*/
+                            finish()
+                        }
                     }
                 }
             }

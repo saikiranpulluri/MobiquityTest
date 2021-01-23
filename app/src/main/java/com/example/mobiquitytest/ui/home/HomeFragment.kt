@@ -11,8 +11,8 @@ import com.example.mobiquitytest.R
 import com.example.mobiquitytest.adapters.CityAdapter
 import com.example.mobiquitytest.databinding.FragmentHomeBinding
 import com.example.mobiquitytest.ui.home.viewmodels.HomeViewModel
-import com.example.mobiquitytest.work.GetCurrentWeatherWorker
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
     private val viewModel by activityViewModels<HomeViewModel>()
@@ -47,12 +47,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         bind.savedCities.visibility = View.GONE
                     }
                 }
-            }
-        }
-
-        lifecycleScope.launch {
-            viewModel.getAllCities().map {
-                GetCurrentWeatherWorker.send(requireContext(), it.pinCode)
             }
         }
     }
