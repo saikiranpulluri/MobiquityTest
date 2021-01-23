@@ -23,12 +23,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MobiquityTest"
         tools:ignore="AllowBackup">
-        <activity android:name=".MapActivity">
+        <activity android:name=".ui.home.MapActivity">
 
         </activity>
-        <activity
-            android:name=".DashboardActivity"
-            android:label="@string/title_activity_dashboard">
+        <activity android:name=".DashboardActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

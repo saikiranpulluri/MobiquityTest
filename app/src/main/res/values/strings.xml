@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">MobiquityTest</string>
-    <string name="title_activity_dashboard">MainActivity</string>
+    <string name="app_name">Mobiquity Test</string>
+    <string name="title_activity_dashboard">Dashboard Activity</string>
     <string name="title_home">Home</string>
     <string name="title_help">Help</string>
     <string name="title_settings">Settings</string>
@@ -9,4 +9,7 @@
     <string name="country">Country</string>
     <string name="city">City</string>
     <string name="save">Save</string>
+    <string name="centigrade_symbol"> °C</string>
+    <string name="farenhite_symbol"> °F</string>
+    <string name="kelvin_symbol"> °K</string>
 </resources>

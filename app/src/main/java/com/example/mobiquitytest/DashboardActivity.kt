@@ -1,14 +1,25 @@
 package com.example.mobiquitytest
 
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.mobiquitytest.ui.home.viewmodels.HomeViewModel
+import com.example.mobiquitytest.utils.ViewModelFactory
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class DashboardActivity : AppCompatActivity() {
+
+    private val homeViewModel: HomeViewModel by lazy {
+        val activity = requireNotNull(this) {
+            "This is to initialize check if we are accessing viewmodel only after onActivityCreated()"
+        }
+        ViewModelProvider(this, ViewModelFactory(activity.application))
+            .get(HomeViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

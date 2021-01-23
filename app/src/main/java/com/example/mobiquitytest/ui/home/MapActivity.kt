@@ -1,4 +1,4 @@
-package com.example.mobiquitytest
+package com.example.mobiquitytest.ui.home
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
@@ -9,23 +9,38 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.example.mobiquitytest.R
+import com.example.mobiquitytest.ui.home.viewmodels.MapViewModel
+import com.example.mobiquitytest.utils.ViewModelFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
-
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     private var pinLocation: AppCompatImageView? = null
     private var etCountry: TextInputEditText? = null
     private var etCity: TextInputEditText? = null
+    private lateinit var btnSave: AppCompatButton
     private var mMap: GoogleMap? = null
     private var latLng: LatLng? = null
+    private lateinit var zipCode: String
+    private val mapViewModel: MapViewModel by lazy {
+        val activity = requireNotNull(this) {
+            "This is to initialize check if we are accessing viewmodel only after onActivityCreated()"
+        }
+        ViewModelProvider(this, ViewModelFactory(activity.application))
+            .get(MapViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +49,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         pinLocation = findViewById(R.id.pin_location)
         etCountry = findViewById(R.id.et_country)
         etCity = findViewById(R.id.et_city)
+        btnSave = findViewById(R.id.btn_save)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(
                     ACCESS_COARSE_LOCATION
@@ -51,6 +67,26 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             R.id.map
         ) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        btnSave.setOnClickListener {
+            if (valid()) {
+                lifecycleScope.launch {
+                    latLng?.let { it1 ->
+                        mapViewModel.saveLocationToDB(
+                            it1,
+                            etCountry?.text.toString(), etCity?.text.toString(),
+                            zipCode
+                        )
+
+                        finish()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun valid(): Boolean {
+        return true
     }
 
     override fun onMapReady(googleMap: GoogleMap?) {
@@ -104,14 +140,19 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                     val address = addresses[0]
                     val countryStr = address.countryName
                     val cityStr = address.locality
+                    zipCode = address.postalCode
                     /*val stateStr =
                         if (isStringNotEmpty(address.adminArea)) address.adminArea else ""
                     val zipCodeStr =
                         if (isStringNotEmpty(address.postalCode)) address.postalCode else ""*/
                     Timber.i("countryStr::$countryStr")
                     Timber.i("cityStr::$cityStr")
-                    etCountry?.setText(countryStr)
-                    etCity?.setText(cityStr)
+                    countryStr?.let {
+                        etCountry?.setText(countryStr)
+                    }
+                    cityStr?.let {
+                        etCity?.setText(cityStr)
+                    }
                 }
                 System.gc()
             } catch (e: java.lang.Exception) {
